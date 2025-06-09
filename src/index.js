@@ -37,7 +37,7 @@ function start(client) { // Inicio ciclo do BOT
 
     // Evitando números bloqueados
     if (bloqueados.includes(number)) {
-      console.log('Mensagem bloqueada');
+      console.log('Mensagem bloqueadas');
       return;
     }
 
