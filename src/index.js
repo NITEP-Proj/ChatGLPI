@@ -41,8 +41,11 @@ function start(client) { // Inicio ciclo do BOT
       return;
     }
 
-    // Iniciando através da palavra 'suporte'
-    if (!sessions[number] && msg.toLowerCase().includes('suporte')) {
+    // Checando sessões não ativas
+    if(!sessions[number]) {
+
+      // Ativando a sessão através da palavra suporte
+      if (msg.toLowerCase().includes('suporte')) {
 
       sessions[number] = { step: 'aguardandoOpcao' }; // Leva até as opções
 
@@ -51,16 +54,16 @@ function start(client) { // Inicio ciclo do BOT
 1️⃣ Abrir chamado
 2️⃣ Consultar chamado
 3️⃣ Falar com atendente`);
+
       return;
+
+      } else {
+        // Sessão não ativada pela palavra, não faz nada por enquanto
+        return;
+      }
     }
 
-    // Controle das sessões não iniciadas 'suporte'
-    if (!sessions[number]) {
-      // Não faz nada por enquanto
-      return;
-    }
-
-    const session = sessions[number]; // Sessão ativa do usuário identificado pelo número
+    const session = sessions[number]; // Sessão ativa do usuário identificando pelo número
     
     // Menu de opçoes
     if (session.step == 'aguardandoOpcao') {
