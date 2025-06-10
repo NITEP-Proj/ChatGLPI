@@ -1,8 +1,12 @@
 const wppconnect = require('@wppconnect-team/wppconnect'); // Importando o modulo responsavel
+const { default: axios } = require('axios');
+const { title } = require('process');
 
 const sessions = {}; // Controle das sessões ativas
 
 const bloqueados = ['+559833015554@c.us'] // Número bloqueado (AT HAND)
+
+const url = 'http://localhost.com';
 
 wppconnect
   .create({
@@ -89,13 +93,29 @@ function start(client) { // Inicio ciclo do BOT
     } 
     
     else if (session.step === 'abrindo_chamado') {
-      // Conexão API do GLPI com o conteúdo da mensagem (msg)
-      await client.sendText(number, '✅ Chamado criado com sucesso!');
 
-      // Encerando a sessão
-      session.step = 'fim';
-      await client.sendText(number, 'Se precisar de mais alguma coisa, digite *suporte*.');
-      delete sessions[number];
+      await axios.post(url, {
+        title: 'Chamado via WhatsApp',
+        description: msg
+      })
+      .then(async (res) => {
+        const ticketID = res.data.ticket_id;
+        await client.sendText(number, `✅ Chamado criado com ID: ${ticketID}`);
+
+        // Encerando a sessão
+        session.step = 'fim';
+        await client.sendText(number, 'Se precisar de mais alguma coisa, digite *suporte*.');
+        delete sessions[number];
+      })
+      .catch(async (err) => {
+        console.error('Erro ao criar chamado: ', err);
+        await client.sendText(number, '❌ Erro ao abrir chamado no sistema.');
+
+        session.step = 'aguardandoOpcao';
+      });
+
+      /* Conexão API do GLPI com o conteúdo da mensagem (msg)
+      await client.sendText(number, '✅ Chamado criado com sucesso!');*/
     } 
     
     else if (session.step === 'consultando') {
