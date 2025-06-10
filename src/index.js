@@ -6,7 +6,7 @@ const sessions = {}; // Controle das sessões ativas
 
 const bloqueados = ['+559833015554@c.us'] // Número bloqueado (AT HAND)
 
-const url = 'http://localhost.com';
+const url = 'http://localhost.com'; // URL
 
 wppconnect
   .create({
@@ -92,7 +92,7 @@ function start(client) { // Inicio ciclo do BOT
       }
     } 
     
-    else if (session.step === 'abrindo_chamado') {
+    if (session.step == 'abrindo_chamado') {
 
       await axios.post(url, {
         title: 'Chamado via WhatsApp',
@@ -113,12 +113,10 @@ function start(client) { // Inicio ciclo do BOT
 
         session.step = 'aguardandoOpcao';
       });
-
-      /* Conexão API do GLPI com o conteúdo da mensagem (msg)
-      await client.sendText(number, '✅ Chamado criado com sucesso!');*/
+  
     } 
     
-    else if (session.step === 'consultando') {
+    else if (session.step == 'consultando') {
       // Consulta à API do GLPI pelo ID fornecido
       await client.sendText(number,`📄 Status do chamado ${msg}: Em andamento.`);
 
