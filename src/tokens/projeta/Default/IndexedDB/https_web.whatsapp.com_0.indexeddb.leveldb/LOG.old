@@ -1,0 +1,51 @@
+2025/06/10-18:19:41.129 7bc0 Reusing MANIFEST C:\Users\victor.sousa\ChatGLPI\src\tokens\projeta\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/06/10-18:19:41.131 7bc0 Recovering log #239
+2025/06/10-18:19:41.165 7bc0 Reusing old log C:\Users\victor.sousa\ChatGLPI\src\tokens\projeta\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000239.log 
+2025/06/10-18:19:42.269 723c Level-0 table #251: started
+2025/06/10-18:19:42.293 723c Level-0 table #251: 155228 bytes OK
+2025/06/10-18:19:42.295 723c Delete type=0 #239
+2025/06/10-18:19:42.297 7bc0 Manual compaction at level-0 from '\x00\x1f\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00 \x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/06/10-18:19:46.280 a538 Compacting 1@1 + 8@2 files
+2025/06/10-18:19:46.420 a538 Generated table #252@1: 42021 keys, 2206766 bytes
+2025/06/10-18:19:46.492 a538 Generated table #253@1: 2368 keys, 2139921 bytes
+2025/06/10-18:19:46.588 a538 Generated table #254@1: 11441 keys, 2162505 bytes
+2025/06/10-18:19:46.739 a538 Generated table #255@1: 27309 keys, 2213891 bytes
+2025/06/10-18:19:46.829 a538 Generated table #256@1: 27020 keys, 2150757 bytes
+2025/06/10-18:19:47.044 a538 Generated table #257@1: 101643 keys, 2253941 bytes
+2025/06/10-18:19:47.284 a538 Generated table #258@1: 101991 keys, 2253386 bytes
+2025/06/10-18:19:47.421 a538 Generated table #259@1: 56083 keys, 1243228 bytes
+2025/06/10-18:19:47.421 a538 Compacted 1@1 + 8@2 files => 16624395 bytes
+2025/06/10-18:19:47.422 a538 compacted to: files[ 0 0 8 0 0 0 0 ]
+2025/06/10-18:19:47.423 a538 Delete type=2 #241
+2025/06/10-18:19:47.424 a538 Delete type=2 #242
+2025/06/10-18:19:47.424 a538 Delete type=2 #243
+2025/06/10-18:19:47.424 a538 Delete type=2 #244
+2025/06/10-18:19:47.424 a538 Delete type=2 #245
+2025/06/10-18:19:47.424 a538 Delete type=2 #246
+2025/06/10-18:19:47.424 a538 Delete type=2 #247
+2025/06/10-18:19:47.425 a538 Delete type=2 #248
+2025/06/10-18:19:47.425 a538 Delete type=2 #251
+2025/06/10-18:20:10.327 a538 Level-0 table #261: started
+2025/06/10-18:20:10.383 a538 Level-0 table #261: 1135770 bytes OK
+2025/06/10-18:20:10.389 a538 Delete type=0 #250
+2025/06/10-18:20:10.754 a538 Compacting 1@1 + 8@2 files
+2025/06/10-18:20:11.003 a538 Generated table #262@1: 42910 keys, 2208964 bytes
+2025/06/10-18:20:11.095 a538 Generated table #263@1: 2368 keys, 2141898 bytes
+2025/06/10-18:20:11.187 a538 Generated table #264@1: 11600 keys, 2163370 bytes
+2025/06/10-18:20:11.311 a538 Generated table #265@1: 27184 keys, 2212859 bytes
+2025/06/10-18:20:11.424 a538 Generated table #266@1: 21708 keys, 2145090 bytes
+2025/06/10-18:20:11.585 a538 Generated table #267@1: 102252 keys, 2253557 bytes
+2025/06/10-18:20:11.757 a538 Generated table #268@1: 102561 keys, 2253219 bytes
+2025/06/10-18:20:11.860 a538 Generated table #269@1: 76112 keys, 1676629 bytes
+2025/06/10-18:20:11.860 a538 Compacted 1@1 + 8@2 files => 17055586 bytes
+2025/06/10-18:20:11.861 a538 compacted to: files[ 0 0 8 0 0 0 0 ]
+2025/06/10-18:20:11.862 a538 Delete type=2 #252
+2025/06/10-18:20:11.862 a538 Delete type=2 #253
+2025/06/10-18:20:11.862 a538 Delete type=2 #254
+2025/06/10-18:20:11.862 a538 Delete type=2 #255
+2025/06/10-18:20:11.863 a538 Delete type=2 #256
+2025/06/10-18:20:11.863 a538 Delete type=2 #257
+2025/06/10-18:20:11.864 a538 Delete type=2 #258
+2025/06/10-18:20:11.864 a538 Delete type=2 #259
+2025/06/10-18:20:11.864 a538 Delete type=2 #261
+2025/06/10-18:24:50.493 ec0 Manual compaction at level-0 from '\x00 \x00\x00\x00' @ 72057594037927935 : 1 .. '\x00!\x00\x00\x00' @ 0 : 0; will stop at (end)

@@ -51,9 +51,14 @@ async def criar_chamado(session_token: str, titulo: str, descricao: str):
         }
     }
 
-    async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient() as client:
         logger.info(f"Enviando requisição para: {GLPI_URL}/Ticket")
         response = await client.post(f"{GLPI_URL}/Ticket", headers=headers, json=payload)
         logger.info(f"Resposta criação: {response.status_code} | {response.text}")
         response.raise_for_status()
-        return response.json()
+
+        try:
+            return response.json()
+        except Exception as e:
+            logger.error(f"Erro ao converter resposta em JSON: {e}")
+            raise Exception(f"Erro ao criar chamado: {response.text}")

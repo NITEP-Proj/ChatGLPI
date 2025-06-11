@@ -1,0 +1,18 @@
+2025/06/10-18:27:20.502 9904 Reusing MANIFEST C:\Users\victor.sousa\ChatGLPI\src\tokens\projeta\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/06/10-18:27:20.503 9904 Recovering log #260
+2025/06/10-18:27:20.582 9904 Reusing old log C:\Users\victor.sousa\ChatGLPI\src\tokens\projeta\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000260.log 
+2025/06/10-18:27:21.653 9904 Level-0 table #272: started
+2025/06/10-18:27:21.709 9904 Level-0 table #272: 544984 bytes OK
+2025/06/10-18:27:21.719 9904 Delete type=0 #260
+2025/06/10-18:27:21.722 9904 Manual compaction at level-0 from '\x00!\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00"\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/06/10-18:27:27.017 5b40 Compacting 1@1 + 8@2 files
+2025/06/10-18:27:27.331 5b40 Generated table #273@1: 43932 keys, 2212236 bytes
+2025/06/10-18:27:27.408 5b40 Generated table #274@1: 2327 keys, 2147467 bytes
+2025/06/10-18:27:27.563 5b40 Generated table #275@1: 12017 keys, 2166278 bytes
+2025/06/10-18:27:28.181 5b40 Generated table #276@1: 26139 keys, 2209777 bytes
+2025/06/10-18:27:28.407 5b40 Generated table #277@1: 22882 keys, 2144936 bytes
+2025/06/10-18:27:28.811 5b40 Generated table #278@1: 102373 keys, 2253762 bytes
+2025/06/10-18:27:29.189 5b40 Generated table #279@1: 102424 keys, 2252804 bytes
+2025/06/10-18:27:29.419 5b40 Generated table #280@1: 77349 keys, 1703219 bytes
+2025/06/10-18:27:29.419 5b40 Compacted 1@1 + 8@2 files => 17090479 bytes
+2025/06/10-18:27:29.421 5b40 compacted to: files[ 0 0 8 0 0 0 0 ]
