@@ -1,28 +1,31 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from API.glpi import glpi_login, criar_chamado  # Certifique-se que API/ tenha __init__.py
+from API.glpi import glpi_login, criar_chamado  # Certifique-se de que há um __init__.py na pasta API
 
 app = FastAPI()
 
-# Modelo dos dados esperados no corpo da requisição
+# Modelo do corpo da requisição
 class ChamadoRequest(BaseModel):
     phone: str
     message: str
 
-# Endpoint POST para criação de chamado
 @app.post("/chamado")
 async def criar_chamado_api(data: ChamadoRequest):
     try:
         titulo = f"Chamado de {data.phone}"
-        descricao = data.message
+        descricao = data.message.strip()  # Evita espaços em branco acidentais
 
-        # Login no GLPI e criação do chamado
-        session_token = await glpi_login()  # Deve ser async
-        resultado = await criar_chamado(session_token, titulo, descricao)  # Deve ser async
+        # Autenticação e criação do chamado no GLPI
+        session_token = await glpi_login()
+        resultado = await criar_chamado(session_token, titulo, descricao)
+
+        chamado_id = resultado.get("id")
+        if not chamado_id:
+            raise Exception("ID do chamado não retornado pelo GLPI.")
 
         return {
             "status": "sucesso",
-            "chamado_id": resultado.get("id", "N/A"),
+            "chamado_id": chamado_id,
             "mensagem": "Chamado criado com sucesso!"
         }
 
