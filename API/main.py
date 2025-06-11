@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from API.glpi import glpi_login, criar_chamado  # Certifique-se de que há um __init__.py na pasta API
+from API.glpi import glpi_login, criar_chamado  # Rode o Venv antes de executar este script
 
 app = FastAPI()
 
