@@ -1,130 +1,129 @@
-const wppconnect = require('@wppconnect-team/wppconnect'); // Importando o modulo responsavel
+/* eslint-disable prettier/prettier */
+const wppconnect = require('@wppconnect-team/wppconnect');
 const { default: axios } = require('axios');
-const { title } = require('process');
 
-const sessions = {}; // Controle das sessões ativas
-
-const bloqueados = ['+559833015554@c.us'] // Número bloqueado (AT HAND)
-
-const url = 'http://localhost:8000/chamado'; // URL
+const sessions = {};
+const bloqueados = ['+559833015554@c.us'];
+const API_URL = 'http://localhost:8000/chamado';
 
 wppconnect
   .create({
-    session: 'projeta', // Nome sessão
-
+    session: 'projeta',
     catchQR: (base64Qrimg, asciiQR) => {
-      console.log('Escaneie o QR abaixo: ');
+      console.log('Escaneie o QR abaixo:');
       console.log(asciiQR);
     },
-
     statusFind: (statusSession, session) => {
-
-
-      console.log('Sessão: ', session); // Nome sessão
-      console.log('Status: ', statusSession); // Status sessão
+      console.log('Sessão: ', session);
+      console.log('Status: ', statusSession);
     },
   })
-
   .then((client) => start(client))
-  .catch((error) => console.log(error)); // Tratamento de error
+  .catch((error) => console.log(error));
 
-function start(client) { // Inicio ciclo do BOT
-
+function start(client) {
   client.onMessage(async (message) => {
+    const number = message.from;
+    const name = message.sender?.pushname || message.sender?.name;
+    const msg = message.body.trim();
 
-    const number = message.from; // Número
-    const name = message.sender?.pushname || message.sender?.name; // Nome
-    const msg = message.body.trim().toLowerCase(); // Mensagem
+    if (!number.endsWith('@c.us') || number === 'status@broadcast' || !msg) return;
+    if (bloqueados.includes(number)) return;
 
-
-    if (!number.endsWith('@c.us') || number == 'status@broadcast' || !msg) return; // Eliminando grupos, status e mensagens vazias
-
-    // Evitando números bloqueados
-    if (bloqueados.includes(number)) {
-      console.log('Mensagem bloqueadas');
-      return;
-    }
-
-    // Checando sessões não ativas
-    if(!sessions[number]) {
-
-      // Ativando a sessão através da palavra suporte
+    // Início da sessão
+    if (!sessions[number]) {
       if (msg.toLowerCase().includes('suporte')) {
-
-      sessions[number] = { step: 'aguardandoOpcao' }; // Leva até as opções
-
-      await client.sendText(number, `👋 Olá! ${name}, Bem vindo ao suporte Projeta`); // Saudação
-      await client.sendText(number, `Escolha uma opção:
+        sessions[number] = { step: 'aguardandoOpcao' };
+        await client.sendText(number, `👋 Olá ${name}, bem-vindo ao suporte Projeta.`);
+        await client.sendText(
+          number,
+          `Escolha uma opção:
 1️⃣ Abrir chamado
 2️⃣ Consultar chamado
-3️⃣ Falar com atendente`);
-
-      return;
-
+3️⃣ Falar com atendente`
+        );
+        return;
       } else {
-        // Sessão não ativada pela palavra, não faz nada por enquanto
         return;
       }
     }
 
-    const session = sessions[number]; // Sessão ativa do usuário identificando pelo número
-    
-    // Menu de opçoes
-    if (session.step == 'aguardandoOpcao') {
+    const session = sessions[number];
 
-      if (msg == '1') {
+    // Etapa 1: Seleção da opção
+    if (session.step === 'aguardandoOpcao') {
+      if (msg === '1') {
+        session.step = 'aguardandoDescricao';
         await client.sendText(number, '📝 Por favor, descreva o problema.');
-        session.step = 'abrindo_chamado';
-      } 
-      
-      else if (msg == '2') {
-        await client.sendText(number,'🔍 Informe o número do chamado para consulta.');
+      } else if (msg === '2') {
         session.step = 'consultando';
-      } 
-      
-      else if (msg == '3') {
-        await client.sendText(number, '🤝 Encaminhando para um atendente...');
+        await client.sendText(number, '🔍 Informe o número do chamado para consulta.');
+      } else if (msg === '3') {
         delete sessions[number];
-      } 
-      
-      else {
-        await client.sendText(number, 'Opção inválida. Digite 1, 2 ou 3.');
+        await client.sendText(number, '🤝 Encaminhando para um atendente...');
+      } else {
+        await client.sendText(number, '❌ Opção inválida. Digite 1, 2 ou 3.');
       }
-    } 
-    
-    if (session.step == 'abrindo_chamado') {
+      return;
+    }
 
-      await axios.post(url, {
-        phone: number.replace('@c.us', ''),
-        message: msg
-      })
-      .then(async (res) => {
-        const ticketID = res.data.chamado_id;
-        await client.sendText(number, `✅ Chamado criado com ID: ${ticketID}`);
-    
-        // Encerando a sessão
-        session.step = 'fim';
+    // Etapa 2: Abertura do chamado
+    if (session.step === 'aguardandoDescricao') {
+      const descricao = msg;
+      try {
+        const response = await axios.post(API_URL, {
+          phone: number.replace('@c.us', ''),
+          message: descricao,
+        });
+
+        
+
+        await client.sendText(number, `✅ Chamado aberto com sucesso!\nNúmero do chamado: *#${response.data?.chamado_id}*`);
         await client.sendText(number, 'Se precisar de mais alguma coisa, digite *suporte*.');
         delete sessions[number];
-      })
-      .catch(async (err) => {
-        console.error('Erro ao criar chamado: ', err);
-        await client.sendText(number, '❌ Erro ao abrir chamado no sistema.');
-    
+      } catch (err) {
+        console.error('Erro ao criar chamado:', err);
+        await client.sendText(number, '❌ Erro ao abrir chamado. Tente novamente mais tarde.');
         session.step = 'aguardandoOpcao';
-      });
-    
+      }
+      return;
     }
-    // Consultando chamado 
-    
-    else if (session.step == 'consultando') {
-      // Consulta à API do GLPI pelo ID fornecido
-      await client.sendText(number,`📄 Status do chamado ${msg}: Em andamento.`);
 
-      // Encerrando a sessão
-      session.step = 'fim';
-      await client.sendText(number,'Se precisar de mais alguma coisa, digite *suporte*.');
+    // Etapa 3: Consulta do chamado
+    if (session.step === 'consultando') {
+      const idChamado = msg;
+      try {
+        const res = await axios.get(`${API_URL}/${idChamado}`);
+        const dados = res.data.dados;
+
+        await client.sendText(
+          number,
+          `📄 *Status do chamado #${idChamado}:*\n\n` +
+          `📌 *Título:* ${dados.titulo}\n` +
+          `📝 *Descrição:* ${dados.descricao}\n` +
+          `📅 *Aberto em:* ${dados.data_abertura}\n` +
+          `📊 *Status:* ${interpretarStatus(dados.status_chamado)}`
+        );
+      } catch (err) {
+        console.error('Erro ao consultar chamado:', err?.response?.data || err);
+        await client.sendText(number, '❌ Erro ao consultar o chamado. Verifique o número e tente novamente.');
+      }
+
+      await client.sendText(number, 'Se precisar de mais alguma coisa, digite *suporte*.');
       delete sessions[number];
+      return;
     }
   });
+}
+
+function interpretarStatus(status) {
+  const map = {
+    1: 'Novo',
+    2: 'Em andamento',
+    3: 'Aguardando',
+    4: 'Aguardando aprovação',
+    5: 'Resolvido',
+    6: 'Fechado'
+  };
+  return map[status] || `Desconhecido (${status})`;
 }
