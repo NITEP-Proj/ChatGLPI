@@ -42,7 +42,6 @@ async def glpi_login():
             logger.error(f"Erro ao processar login no GLPI: {e}")
             raise
 
-
 # Criação do chamado
 async def criar_chamado(session_token: str, titulo: str, descricao: str):
     logger.info(f"Criando chamado: {titulo}")
@@ -75,6 +74,8 @@ async def criar_chamado(session_token: str, titulo: str, descricao: str):
             logger.error(f"Erro ao converter resposta em JSON: {e}")
             logger.error(f"Conteúdo bruto da resposta: {response.text}")
             raise Exception(f"Erro ao criar chamado: {response.text}")
+
+# Consulta do último chamado criado
 async def consultar_chamado(session_token: str, chamado_id: int):
     logger.info(f"Consultando chamado ID: {chamado_id}")
     headers = {
@@ -94,6 +95,33 @@ async def consultar_chamado(session_token: str, chamado_id: int):
         except Exception as e:
             logger.error(f"Erro ao converter resposta da consulta em JSON: {e}")
             raise Exception(f"Erro ao consultar chamado: {response.text}")
+
+async def consultar_ultimo_chamado(session_token: str) -> dict:
+    logger.info("Consultando o último chamado (mais recente)...")
+
+    headers = {
+        "App-Token": APP_TOKEN,
+        "Session-Token": session_token,
+        "Range": "0-0",  # devolve 1 único registro
+        "Content-Type": "application/json"
+    }
+    params = {"sort": "id", "order": "DESC"}
+
+    async with httpx.AsyncClient(timeout=10) as client:
+        resp = await client.get(f"{GLPI_URL}/Ticket", headers=headers, params=params)
+
+        print(f"GLPI RESPOSTA STATUS: {resp.status_code}")
+        print(f"GLPI RESPOSTA TEXTO: {resp.text}")
+
+
+        # Aceita 200 ou 206 como sucesso
+        if resp.status_code not in (200, 206):
+            logger.error(f"GLPI erro {resp.status_code}: {resp.text}")
+            raise Exception(f"Erro {resp.status_code} na consulta")
+
+        data = resp.json()
+        return data[0] if isinstance(data, list) and data else {}
+
 
 
 # Verifica se as variáveis de ambiente estão configuradas

@@ -4,7 +4,7 @@ const { default: axios } = require('axios');
 
 const sessions = {};
 const bloqueados = ['+559833015554@c.us'];
-const API_URL = 'http://localhost:8000/chamado';
+const API_URL = 'http://localhost:8000';
 
 wppconnect
   .create({
@@ -71,21 +71,35 @@ function start(client) {
     if (session.step === 'aguardandoDescricao') {
       const descricao = msg;
       try {
-        const response = await axios.post(API_URL, {
+        const response = await axios.post(`${API_URL}/chamado`, {
           phone: number.replace('@c.us', ''),
           message: descricao,
         });
 
-        
-
-        await client.sendText(number, `✅ Chamado aberto com sucesso!\nNúmero do chamado: *#${response.data?.chamado_id}*`);
-        await client.sendText(number, 'Se precisar de mais alguma coisa, digite *suporte*.');
+        // 2. Busca o ID do ticket mais recente
+        const { data } = await axios.get(`${API_URL}/chamado/ultimo`);
+        const ticketId = data?.dados?.id ?? 'Indisponível';
+        await client.sendText(
+          number,
+          `✅ Chamado aberto com sucesso!\nNúmero do chamado: *#${ticketId}*`
+        );
+        await client.sendText(
+          number,
+          'Se precisar de mais alguma coisa, digite *suporte*.'
+        );
         delete sessions[number];
       } catch (err) {
         console.error('Erro ao criar chamado:', err);
-        await client.sendText(number, '❌ Erro ao abrir chamado. Tente novamente mais tarde.');
-        session.step = 'aguardandoOpcao';
+        await client.sendText(
+          number,
+          '🔁 Estamos com uma instabilidade no momento. Por favor, tente abrir seu chamado novamente em alguns minutos.'
+        );
+        await client.sendText(
+          number,
+          'Se precisar de mais alguma coisa, digite *suporte*.'
+        );
       }
+      delete sessions[number];
       return;
     }
 
