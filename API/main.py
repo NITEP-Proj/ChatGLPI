@@ -7,6 +7,7 @@ app = FastAPI()
 # Modelo do corpo da requisição
 class ChamadoRequest(BaseModel):
     phone: str
+    name: str
     message: str
 
 # Endpoint para criação de chamado
@@ -14,7 +15,7 @@ class ChamadoRequest(BaseModel):
 async def criar_chamado_api(data: ChamadoRequest):
     try:
         # Remove espaços extras e monta os campos
-        titulo = f"Chamado de {data.phone.strip()}"
+        titulo = f"Chamado de {data.name.strip()} - {data.phone.strip()}"
         descricao = data.message.strip()
 
         # Login no GLPI

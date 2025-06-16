@@ -72,8 +72,9 @@ function start(client) {
       const descricao = msg;
       try {
         const response = await axios.post(`${API_URL}/chamado`, {
-          phone: number.replace('@c.us', ''),
-          message: descricao,
+        phone: number.replace('@c.us', ''),
+        name: name, // novo campo enviado
+        message: descricao,
         });
 
         // 2. Busca o ID do ticket mais recente
