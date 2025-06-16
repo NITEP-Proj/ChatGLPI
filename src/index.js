@@ -103,21 +103,15 @@ function start(client) {
       return;
     }
 
-    // Etapa 3: Consulta do chamado
+    // Etapa 3: Consulta de chamado
     if (session.step === 'consultando') {
       const idChamado = msg;
       try {
-        const res = await axios.get(`${API_URL}/${idChamado}`);
+        const res = await axios.get(`${API_URL}/chamado/${idChamado}`);
         const dados = res.data.dados;
 
-        await client.sendText(
-          number,
-          `📄 *Status do chamado #${idChamado}:*\n\n` +
-          `📌 *Título:* ${dados.titulo}\n` +
-          `📝 *Descrição:* ${dados.descricao}\n` +
-          `📅 *Aberto em:* ${dados.data_abertura}\n` +
-          `📊 *Status:* ${interpretarStatus(dados.status_chamado)}`
-        );
+        const mensagem = montarMensagemChamado(dados);
+        await client.sendText(number, mensagem);
       } catch (err) {
         console.error('Erro ao consultar chamado:', err?.response?.data || err);
         await client.sendText(number, '❌ Erro ao consultar o chamado. Verifique o número e tente novamente.');
@@ -130,14 +124,33 @@ function start(client) {
   });
 }
 
+// Interpreta o status numérico
 function interpretarStatus(status) {
   const map = {
-    1: 'Novo',
-    2: 'Em andamento',
-    3: 'Aguardando',
-    4: 'Aguardando aprovação',
-    5: 'Resolvido',
-    6: 'Fechado'
+    '1': 'Novo',
+    '2': 'Em andamento',
+    '3': 'Aguardando',
+    '4': 'Aguardando aprovação',
+    '5': 'Resolvido',
+    '6': 'Fechado'
   };
-  return map[status] || `Desconhecido (${status})`;
+  return map[status?.toString()] || `Desconhecido (${status})`;
+}
+
+// Monta mensagem formatada do chamado
+function montarMensagemChamado(dados) {
+  const titulo = dados.titulo || 'Sem título';
+  const data = new Date(dados.data_abertura).toLocaleString('pt-BR', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+
+  const status = interpretarStatus(dados.status_chamado);
+  const descricao = dados.descricao?.trim() || 'Sem descrição';
+
+  return `✅ *Detalhes do Chamado*\n\n` +
+         `📄 *Título*: ${titulo}\n` +
+         `📅 *Abertura*: ${data}\n` +
+         `🏷️ *Status*: ${status}\n\n` +
+         `📝 *Descrição*:\n${descricao}`;
 }
