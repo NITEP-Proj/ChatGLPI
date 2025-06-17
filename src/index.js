@@ -57,8 +57,9 @@ function start(client) {
     if (!session) {
       await client.sendText(
         number,
-        `💬 Olá! Seja bem-vindo ao atendimento automático da Projeta.
-Digite *suporte* para começar.`
+        `👋 Olá! Que bom ter você por aqui 😊  
+Sou o assistente virtual da *Projeta*.  
+Digite *suporte* para iniciar o atendimento.`
       );
       sessions[number] = { step: 'aguardandoSuporte' };
       return;
@@ -69,7 +70,8 @@ Digite *suporte* para começar.`
       if (msg.includes('suporte')) {
         sessions[number] = { step: 'aguardandoOpcao' };
       } else {
-        await client.sendText(number, `ℹ️ Para iniciar o atendimento, digite *suporte*.`);
+        await client.sendText(number, `❗ Ops! Não entendi...  
+Para começar o atendimento, por favor digite *suporte*.`);
       }
       return;
     }
@@ -112,7 +114,9 @@ Digite *suporte* para começar.`
         delete sessions[number];
       } catch (err) {
         console.error('Erro ao criar chamado:', err);
-        await client.sendText(number, `⚠️ Erro ao abrir o chamado. Tente novamente mais tarde.`);
+        await client.sendText(number, `⚠️ Ocorreu um erro ao tentar abrir seu chamado.  
+Por favor, tente novamente em alguns minutos.  
+Se o problema persistir, entre em contato com nossa equipe de suporte.`);
         delete sessions[number];
       }
       return;
@@ -130,8 +134,8 @@ Digite *suporte* para começar.`
         delete sessions[number];
       } catch (err) {
         console.error('Erro ao consultar chamado:', err?.response?.data || err);
-        await client.sendText(number, `❌ Erro ao consultar o chamado. Verifique o número.`);
-        await client.sendText(number, `⚠️ Digite *suporte* para tentar novamente.`);
+        await client.sendText(number, `❌ Não conseguimos localizar o chamado informado.  
+Confira se o número está correto e, se o erro continuar, fale com nosso time de suporte.`);
         delete sessions[number];
       }
       return;
