@@ -1,3 +1,2 @@
-2025/06/11-17:05:12.595 71bc Reusing MANIFEST C:\Users\victor.sousa\ChatGLPI\src\tokens\projeta\Default\Extension Scripts/MANIFEST-000001
-2025/06/11-17:05:12.596 71bc Recovering log #3
-2025/06/11-17:05:12.597 71bc Reusing old log C:\Users\victor.sousa\ChatGLPI\src\tokens\projeta\Default\Extension Scripts/000003.log 
+2025/06/16-13:08:50.621 1d0 Creating DB C:\Users\PROJETA-BOT01\ChatGLPI\src\tokens\projeta\Default\Extension Scripts since it was missing.
+2025/06/16-13:08:50.645 1d0 Reusing MANIFEST C:\Users\PROJETA-BOT01\ChatGLPI\src\tokens\projeta\Default\Extension Scripts/MANIFEST-000001

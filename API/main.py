@@ -71,7 +71,6 @@ async def consultar_chamado_api(chamado_id: int = Path(..., description="ID do c
                 "titulo": resultado.get("name"),
                 "descricao": resultado.get("content"),
                 "status_chamado": resultado.get("status"),  # 1=Novo, 2=Em andamento, 6=Fechado
-                "data_abertura": resultado.get("date")
             }
         }
 

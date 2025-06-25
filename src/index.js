@@ -32,12 +32,12 @@ function start(client) {
 
     // Início da sessão
     if (!sessions[number]) {
-      if (msg.toLowerCase().includes('suporte')) {
+      if (msg.trim().toLowerCase() === 'suporte') {
         sessions[number] = { step: 'aguardandoOpcao' };
         await client.sendText(number, `👋 Olá ${name}, bem-vindo ao suporte Projeta.`);
         await client.sendText(
           number,
-          `Escolha uma opção:
+          `Escolha uma opção: (Somente Numeros).
 1️⃣ Abrir chamado
 2️⃣ Consultar chamado
 3️⃣ Falar com atendente`
@@ -57,7 +57,7 @@ function start(client) {
         await client.sendText(number, '📝 Por favor, descreva o problema.');
       } else if (msg === '2') {
         session.step = 'consultando';
-        await client.sendText(number, '🔍 Informe o número do chamado para consulta.');
+        await client.sendText(number, '🔍 Informe o número do chamado para consulta (Somente Numeros).');
       } else if (msg === '3') {
         delete sessions[number];
         await client.sendText(number, '🤝 Encaminhando para um atendente...');
@@ -151,7 +151,6 @@ function montarMensagemChamado(dados) {
 
   return `✅ *Detalhes do Chamado*\n\n` +
          `📄 *Título*: ${titulo}\n` +
-         `📅 *Abertura*: ${data}\n` +
          `🏷️ *Status*: ${status}\n\n` +
          `📝 *Descrição*:\n${descricao}`;
 }
