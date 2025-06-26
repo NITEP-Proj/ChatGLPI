@@ -99,13 +99,12 @@ function start(client) {
     /* -----------------------------------------------
      * Fluxo: atendimento manual
      * --------------------------------------------- */
+
     if (atendimentoManual.has(number)) {
-      if (msg.trim().toLowerCase() === 'suporte') {
-        atendimentoManual.delete(number);
-        sessions[number] = { step: 'aguardandoOpcao', lastSeen: Date.now()};
-        await client.sendText(number, mensagemMenu(name));
+      if (msg.trim().toLowerCase() !== 'suporte') {
+        sessions[number] = { step: 'aguardandoSuporte', lastSeen: Date.now() };
+        return;
       }
-      return;
     }
 
     /* -----------------------------------------------
@@ -127,13 +126,13 @@ Digite *suporte* para iniciar o atendimento.`
      * --------------------------------------------- */
     if (session.step === 'aguardandoSuporte') {
       if (msg.trim().toLowerCase() === 'suporte') {
-        sessions[number] = { step: 'aguardandoOpcao', lastSeen: Date.now() };
+
+        if (atendimentoManual.has(number)) {
+          atendimentoManual.delete(number);
+        }
+
         await client.sendText(number, mensagemMenu(name));
-      } else {
-        await client.sendText(
-          number,
-          '❗ Ops! Não entendi...\nPara começar o atendimento, por favor digite *suporte*.'
-        );
+        sessions[number] = { step: 'aguardandoOpcao', lastSeen: Date.now() };
       }
       return;
     }
