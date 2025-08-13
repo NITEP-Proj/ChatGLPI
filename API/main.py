@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, Path
 from pydantic import BaseModel
-from API.glpi import glpi_login, criar_chamado, consultar_chamado, consultar_ultimo_chamado  # Certifique-se de que a pasta API contém um __init__.py
+from glpi import glpi_login, criar_chamado, consultar_chamado, consultar_ultimo_chamado
+  # Certifique-se de que a pasta API contém um __init__.py
 
 app = FastAPI()
 
